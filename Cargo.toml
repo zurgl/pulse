@@ -1,0 +1,43 @@
+[package]
+name = "pulse"
+version = "0.1.0"
+authors = ["Yacine El Ayar <elayar.yacine@gmail.com>"]
+edition = "2021"
+
+
+[lib]
+# no `name` field then default to `package.name`
+path = "src/lib.rs"
+
+
+[[bin]]
+# double brackets: it's an array in TOML's syntax
+# one lib multiple binary
+path = "src/main.rs"
+name = "letters"
+
+
+[dependencies]
+actix-web = "4.2.1"
+tokio = { version = "1.24.1", features = ["macros", "rt-multi-thread"] }
+serde = { version = "1.0.152", features = ["derive"] }
+config = "0.13.3"
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
+
+
+[dependencies.sqlx]
+version = "0.6"
+default-features = false
+features = [
+  "runtime-tokio-rustls",
+  "macros",
+  "postgres",
+  "uuid",
+  "chrono",
+  "migrate",
+]
+
+
+[dev-dependencies]
+reqwest = "0.11.13"
