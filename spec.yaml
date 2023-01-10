@@ -2,7 +2,7 @@ name: pulse
 region: fra
 
 services:
-  - name: zero2prod
+  - name: pulse
     dockerfile_path: Dockerfile
     source_dir: .
 
@@ -20,3 +20,14 @@ services:
 
     routes:
       - path: /
+
+databases:
+  # PG = Postgres
+  - engine: PG
+    # Database name
+    name: newsletter
+    # Again, let's keep the bill lean
+    num_nodes: 1
+    size: db-s-dev-database
+    # Postgres version - using the latest here
+    version: "12"
