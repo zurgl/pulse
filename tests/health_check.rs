@@ -6,7 +6,6 @@ use once_cell::sync::Lazy;
 use pulse::configuration::{get_configuration, DatabaseSettings};
 use pulse::startup::run;
 use pulse::telemetry::{get_subscriber, init_subscriber};
-use secrecy::ExposeSecret;
 
 // Ensure that the `tracing` stack is only initialised once using `once_cell`
 static TRACING: Lazy<()> = Lazy::new(|| {
@@ -28,10 +27,9 @@ pub struct TestApp {
 
 async fn configure_database(config: &DatabaseSettings) -> PgPool {
     // Create Database
-    let mut connection =
-        PgConnection::connect(config.without_db().expose_secret())
-            .await
-            .expect("Failed to connect to Postgres");
+    let mut connection = PgConnection::connect_with(&config.without_db())
+        .await
+        .expect("Failed to connect to Postgres");
 
     connection
         .execute(format!(r#"CREATE DATABASE "{}"; "#, config.database_name).as_str())
@@ -39,7 +37,7 @@ async fn configure_database(config: &DatabaseSettings) -> PgPool {
         .expect("Failed to create database.");
 
     //Migrate database
-    let connection_pool = PgPool::connect(config.with_db().expose_secret())
+    let connection_pool = PgPool::connect_with(config.with_db())
         .await
         .expect("Failed to connect to Postgres.");
 
