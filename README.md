@@ -1,4 +1,4 @@
-# Basci instruction
+# Basic instruction
 
 ```sh
 chmod +x ./scripts/init_db.sh
